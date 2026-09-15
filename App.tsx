@@ -1,114 +1,181 @@
-import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { useState } from 'react';
+import Header from './Components/Header';
+import Footer from './Components/Footer';
+import CoffeeCard from './Components/CoffeeCard';
+import { Image, ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 
 export default function App() {
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleOrder = () => {
+    if (name.trim() === "") {
+      setMessage("Por favor, informe seu nome!")
+    } else {
+      setMessage(`Olá ${name}! Seu pedido foi recebido`)
+    }
+  }
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>Café do código</Text>
-          <Text style={styles.headerSub}>Seu café, uma linha por vez</Text>
-        </View>
-
-        <View style={styles.avatarPlaceholder}>
-          <Ionicons name='person' size={20} color="#2f2d2c"></Ionicons>
-        </View>
-      </View>
-
-      <View style={styles.content}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior='padding'
+      keyboardVerticalOffset={30}>
+      <ScrollView style={styles.container}>
+        {/* Header */}
+        <Header></Header>
+        {/* Header */}
+        {/* Content */}
+        <View style={styles.Main}>
           <View>
-            <Text style={styles.contentText}>Bom dia!</Text>
-            <Text style={styles.contentSub}>Que tal um café hoje?</Text>
-          </View>  
-
+            <Text style={styles.MainTitle}>Bom Dia!</Text>
+            <Text style={styles.MainSubtitle}>Que tal um café hoje?</Text>
+          </View>
 
           <View style={styles.featured}>
-            <Image source={require('./assets/coffee.jpg')} style={styles.image}></Image>
+            <Image
+              source={require('./assets/coffee.jpg')} style={styles.image}>
+            </Image>
+            <Text style={styles.produto}>Cappucino Especial</Text>
+            <Text style={styles.descricao}>Cremoso e delicioso</Text>
+            <Text style={styles.valor}>R$ 12,90</Text>
+          </View>
 
-            <Text>Cappucino Especial</Text>
-            <Text>Cremoso e delicioso</Text>
-            <Text>R$ 12,90</Text>
-      </View>  
-      </View>
+          <Text style={styles.sectionTitle}>Nosso Cardápio</Text>
+          
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+            <CoffeeCard name='Expresso' description='Puro e Forte' price='7,90'></CoffeeCard>
+            <CoffeeCard name='Cappuccino' description='Clássico com espuma' price='12,90'></CoffeeCard>
+            <CoffeeCard name='Late' description='Leite cremoso' price='11,50'></CoffeeCard>
+            <CoffeeCard name='Mocha' description='Toque de chocolate' price='13,50'></CoffeeCard>
+          </View>
 
-      
-    </ScrollView>
+          <View style={styles.orderSection}>
+            <Text style={styles.questionName}>Qual é o seu nome?</Text>
+            <TextInput placeholder='Digite seu nome' style={styles.input} value={name} onChangeText={setName}></TextInput>
+            <TouchableOpacity style={styles.button} onPress={handleOrder}>
+              <Text style={styles.buttonText}>Fazer meu pedido</Text>
+            </TouchableOpacity>
+            {message !== '' && <Text style={styles.messageText}>{message}</Text>}
+          </View>
+        </View>
+        {/* Content */}
+        {/* Footer */}
+        <Footer></Footer>
+        {/* Footer */}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#f7f7f7ff'
   },
-
-  header:{
-    width: '100%',
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-
-  headerTitle:{
-    fontSize: 22,
-    fontWeight: '800',
-    color: "#2f2d2c"
-  },
-
-  headerSub:{
-    fontSize: 14,
-    color: '#9d9d9b',
-    marginTop: 4
-  },
-
-  avatarPlaceholder:{
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#f0f0f0",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-
-  content:{
-    width: '100%',
-    paddingTop: 10,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
-    justifyContent: 'space-between',
-  },
-
-  contentText:{
+  MainTitle: {
     fontSize: 32,
     fontWeight: '800',
     color: "#2f2d2c"
   },
-
-  contentSub:{
-    fontSize: 16,
-    color: '#9d9d9b',
-    marginTop: 8
+  Main: {
+    width: "100%",
+    paddingTop: 10,
+    paddingHorizontal: 24,
+    paddingBottom: 10,
   },
-
-  featured:{
-    backgroundColor: "#ffffff",
+  MainSubtitle: {
+    fontSize: 16,
+    color: "#9b9b9b",
+    marginTop: 8,
+    marginBottom: 16
+  },
+  featured: {
+    backgroundColor: "#ffff",
     borderRadius: 16,
     padding: 16,
-    marginBottom:32,
-    shadowColor: '#000000',
-    shadowOffset: {width: 0, height: 0},
+    marginBottom: 32,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.05,
     elevation: 4
   },
-
-  image:{
+  image: {
     width: "100%",
     height: 188,
     borderRadius: 16,
     marginBottom: 16
+  },
+  produto: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: "#2f2d2c"
+  },
+  descricao: {
+    fontSize: 14,
+    color: "#9b9b9b",
+    marginTop: 4
+  },
+  valor: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: "#c67c4e",
+    marginTop: 12
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: "#2f2d2c",
+    marginBottom: 16
+  },
+  cards: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between"
+  },
+  orderSection: {
+    backgroundColor: "#ffffff",
+    borderRadius: 24,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.05,
+    elevation: 4,
+    padding: 24,
+    marginTop: 10
+  },
+  questionName: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#2f2d2c",
+    marginBottom: 16
+  },
+  input: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 16,
+    width: "100%",
+    paddingHorizontal: 20,
+    height: 56,
+    fontSize: 16
+  },
+  button: {
+    backgroundColor: "#c67c4e",
+    borderRadius: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 20,
+    width: "100%"
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontWeight: "700",
+    fontSize: 16
+  },
+  messageText: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#c67c4e",
+    marginTop: 20,
+    alignItems: "center"
   }
-})
+}
+)
